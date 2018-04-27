@@ -1,7 +1,8 @@
 #lang racket
-(require 2htdp/image)
-(require 2htdp/universe)
-(require lang/posn)
+(require 2htdp/image
+         2htdp/universe
+         lang/posn
+         thing)
 
 (struct game (width height walls player enemies)  #:transparent)
 
@@ -26,9 +27,8 @@
     (begin
       (for ([y (in-range (+ n 1))])
         (for ([x (in-range (+ n 1))])
-          (if (or (= x 0) (= y 0) (= x n) (= y n)) 
-              (hash-set! walls (make-posn x y) #t)
-              void)))
+          (when (or (= x 0) (= y 0) (= x n) (= y n))
+              (hash-set! walls (make-posn x y) #t))))
       walls)))
 
 ;; Drawing / GUI
@@ -78,7 +78,7 @@
 ;     (λ (v i)
 ;       (let ([p (first v)] [char (second v)])
 ;         (draw-char char (if (string=? char "#" ) "gray" "orange") (posn-x p) (posn-y p) i))) img tile-mapping)))
- 
+
 
 
 
@@ -98,7 +98,7 @@
                      (rectangle (* hp-bar-size (if (> hp-ratio 0) hp-ratio 0)) 10 "solid" "red")
                      (rectangle hp-bar-size 10 "solid" "crimson"))
       (text/font (string-append " " (number->string hp) "/" (number->string maxhp)) 12 "white" "Menlo" 'script 'normal 'normal #f))
-    
+
      25 25 'left 'top
      (HUD-background-panel state))))
 
@@ -210,7 +210,7 @@
                                                   (cond
                                                     [(> (length possible-movements) 0)
                                                      (let* ([p (get-random-value possible-movements)] [px (posn-x p)] [py (posn-y p)])
-                                                       (make-enemy (enemy-char enemy) px py (enemy-hp enemy) (enemy-str enemy) (enemy-items enemy)))]  
+                                                       (make-enemy (enemy-char enemy) px py (enemy-hp enemy) (enemy-str enemy) (enemy-items enemy)))]
                                                     [else enemy]))))))))
 
 ; move-enemies: State -> State
@@ -236,16 +236,18 @@
 ; Key Event Handler
 ; State, String -> State
 (define (key-handler state k)
+  (define (in-keybinds k list-of-keybinds)
+    (ormap (λ (kb) (key=? k kb)) list-of-keybinds))
   (cond
     ; vim movement keys
-    [(key=? k "l") (turn (move-player state 1 0))]
-    [(key=? k "h") (turn (move-player state -1 0))]
-    [(key=? k "k") (turn (move-player state 0 -1))]
-    [(key=? k "j") (turn (move-player state 0 1))]
-    [(key=? k "y") (turn (move-player state -1 -1))]
-    [(key=? k "u") (turn (move-player state 1 -1))]
-    [(key=? k "b") (turn (move-player state -1 1))]
-    [(key=? k "n") (turn (move-player state 1 1))]
+    [(in-keybinds k (list "l" "right" "numpad6"))  (turn (move-player state 1 0))]
+    [(in-keybinds k (list "h" "left" "numpad4")) (turn (move-player state -1 0))]
+    [(in-keybinds k (list "k" "up" "numpad8")) (turn (move-player state 0 -1))]
+    [(in-keybinds k (list "l" "down" "numpad2")) (turn (move-player state 0 1))]
+    [(in-keybinds k (list "y" "numpad7")) (turn (move-player state -1 -1))]
+    [(in-keybinds k (list "u" "numpad9")) (turn (move-player state 1 -1))]
+    [(in-keybinds k (list "b" "numpad1")) (turn (move-player state -1 1))]
+    [(in-keybinds k (list "n" "numpad3")) (turn (move-player state 1 1))]
     [(key=? k "-") (struct-copy game state (player (struct-copy player (game-player state) [hp (sub1 (player-hp (game-player state)))])))]
     [else state]))
 
@@ -261,4 +263,4 @@
         (player "@" 1 1 10 10 1 '())
         (list (enemy "r" 6 7 1 1 '()) (enemy "g" 3 7 1 1 '()))))
 
-(big-bang init-state (to-draw render) (on-key key-handler) (stop-when game-over))
+(big-bang init-state (to-draw render) (on-key key-handler) (stop-when game-over) (close-on-stop #t))
