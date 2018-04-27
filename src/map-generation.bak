@@ -6,13 +6,13 @@
 (define current-depth (make-parameter 0))
 ; Generate a new level if one does not exist
 (define (get-level depth)
-  (unless (hash-has-key? levels depth)
-    (define level (make-hash))
-    (hash-set! level 'seed (random))
-    (hash-set! level 'npcs '())
-    (hash-set! level 'gen (level-definition surface nothing nothing))
-    (hash-set! levels depth level))
-  (hash-ref levels depth))
+    (unless (hash-has-key? levels depth)
+        (define level (make-hash))
+        (hash-set! level 'seed (random))
+        (hash-set! level 'npcs '())
+        (hash-set! level 'gen (level-definition surface nothing nothing))
+        (hash-set! levels depth level))
+    (hash-ref levels depth))
 
 (define (get-tile x y)
   (define current-level (get-level (current-depth)))
@@ -73,14 +73,14 @@
 
 (define (nothing seed x y) #f)
 
-(define size 400)
+(define size 1000)
 (define test-img (rectangle size size "solid" "black"))
-(for* ([x (in-range size)]
-       [y (in-range size)])
-  (define tile (get-tile x y))
-  (set! test-img
-        (place-image/align
-         (rectangle 1 1 "solid" (thing-get tile 'color))
-         x y 'left 'top test-img)))
+(for ([x (in-range size)]
+      [y (in-range size)])
+     (define tile (get-tile x y))
+     (set! test-image
+         (place-image
+             (rectangle 1 1 "solid" (thing-get tile 'color))
+             x y test-image)))
 
-(save-image test-img "generated_map.png")
+ test-img

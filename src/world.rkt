@@ -38,8 +38,9 @@
     ; the entity will interact with that entity
     (define/public (try-move entity target)
         (define tile (tile-at (pt-x target) (pt-y target)))
-        (when (thing-get tile 'walkable)
-            (thing-set! entity 'location target))
+        (cond
+            [(not (thing-get tile 'walkable)) (void)]
+            [else (thing-set! entity 'location target)])
         this)
 
     ; big bang functions
