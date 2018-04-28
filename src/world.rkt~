@@ -11,7 +11,7 @@
             [name "player"]
             [attack 10]
             [defense 10]
-            [health 100]));
+            [health 100]))
 
     (define/public (get-player) player)
     ; holds all the log messages

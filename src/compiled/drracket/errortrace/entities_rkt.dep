@@ -1,0 +1,1 @@
+("6.12" ("ba8d7b5fb51847c00ce22fc4d6906baaf56c7dc6" . "167230e4ec7634b952220c2adf6864a0ef9b6b21") #"/Users/larken/git/LispGameJam/src/point.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"thing" #"main.rkt"))

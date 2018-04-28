@@ -1,5 +1,5 @@
 #lang racket
-(require noise thing "point.rkt" ) ; 2htdp/image)
+(require noise thing "point.rkt" 2htdp/image)
 (provide get-tile)
 (struct level-definition (tile-gen npcs items))
 (define levels (make-hasheq))
@@ -72,43 +72,15 @@
   [color "green"])
 
 (define (nothing seed x y) #f)
-(define (real->natural n)
-  (define (helper n acc)
-    (cond
-      [(>= acc n) acc]
-      [(= acc 255) 255]
-      [else (helper n (add1 acc))]))
-  (helper n 0))
 
-;(define (generate-simplex-image freq)
-;  (define size 100)
-;  (define test-img (rectangle size size "solid" "white"))
-;  (for* ([x (in-range size)]
-;         [y (in-range size)])
-;    (define intensity
-;      (real->natural
-;       (* 255
-;          (* 2
-;             (abs (- 1
-;                     (simplex
-;                      (* freq (/ x size))
-;                      (* freq (/ y size)))))))))
-;    (set! test-img
-;          (place-image/align
-;           (rectangle 1 1 "solid" (make-color intensity intensity intensity 255))
-;           x y 'left 'top test-img)))
-;  test-img)
+(define size 400)
+(define test-img (rectangle size size "solid" "black"))
+(for* ([x (in-range size)]
+       [y (in-range size)])
+  (define tile (get-tile x y))
+  (set! test-img
+        (place-image/align
+         (rectangle 1 1 "solid" (thing-get tile 'color))
+         x y 'left 'top test-img)))
 
-(require plot)
-
-(define (create-3d-simplex size freq)
-  (plot3d
-   (surface3d (λ (x y)
-                (* size ; moving it from decimal to 100's
-                   (expt (abs (- 1
-                                (+ (simplex (* freq (/ x size)) (* freq (/ y size)))
-                                   (* 0.5 (simplex (* (* 2 freq) (/ x size))(* (* 2 freq) (/ y size))))
-                                   (* 0.25 (simplex (* (* 4 freq) (/ x size))(* (* 2 freq) (/ y size)))))
-                                ))
-                        2))) 0 size 0 size #:line-style 'transparent)))
-
+(save-image test-img "generated_map.png")
