@@ -12,7 +12,6 @@
 (define-thing entity
   [character "x"]
   [color "white"]
-  [background-color "black"]
   [location (pt 0 0)]
   [inventory '()]
   [view-range 5])
@@ -29,9 +28,9 @@
     [(act self world)
     (send world try-move
         self
-        (+ (thing-get self 'location)
+        (+ (thing-get 'location)
              (pt (- (random 3) 1)
-                 (- (random 3) 1))))]) 
+                 (- (random 3) 1))))])
 
 ; A seeking enemy runs towards the player (heedless of walls) 50% of the time
 ; The other 50% of the time they are identical to a wandering enemy

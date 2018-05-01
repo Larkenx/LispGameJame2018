@@ -4,11 +4,8 @@
 (define world
   (new world%))
 
-; (send world get-render world)
-
 (big-bang (new world%)
-  (name "Merlin's Teleportation Troubles")
+  (name "Racket Roguelike")
   (to-draw (λ (s) (send s get-render s)))
   (on-key (λ (s k) (send s get-key-handler s k)))
-  (stop-when (λ (s) (send s get-end-game-condition))
-             (λ (s) (send s get-end-game-image))))
+  (stop-when (λ (s) (send s get-end-game-condition))))
