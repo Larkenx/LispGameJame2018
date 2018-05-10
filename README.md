@@ -1,10 +1,10 @@
 ![gameplay.png](screenshots/gameplay.png)
 
-# Running the game from binaries (OSX & Windows)
-In order to quickly run the game, there are binaries available for OSX and Windows under this repository's [releases](https://github.com/Larkenx/LispGameJame2018/releases/tag/1.0).
-To run the game from the binaries, simply download either `osx.dmg` or `windows.zip` and extract it somewhere. Open the `main` folder
+# Running the game from binaries
+In order to quickly run the game, there are binaries available for OSX, Windows, and Linux under this repository's [releases](https://github.com/Larkenx/LispGameJame2018/releases/tag/1.0).
+To run the game from the binaries, simply download either `osx.dmg`, `windows.zip`, or `linux.tgz` and extract it somewhere. Open the `main` folder
 in the extracted folder, and run the `main` executable. Note that the windows version of this release differs slightly in the OSX version,
-where the fonts are not 1:1 match to that of the OSX executable and may have some *minor* graphical defects
+where the fonts are not 1:1 match to that of the OSX executable and may have some *minor* graphical defects. The linux build was created with a Manjaro VDE!
 
 # Running from source code
 
